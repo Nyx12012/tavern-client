@@ -1,0 +1,38 @@
+{
+  "name": "tavern-client",
+  "version": "1.0.0",
+  "description": "Typed Node client for the TavernLib console of a self-hosted A Township Tale server.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "CHANGELOG.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": { "node": ">=18" },
+  "keywords": ["a-township-tale", "att", "tavern", "tavernlib", "console", "bot"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nyx12012/tavern-client.git"
+  },
+  "bugs": { "url": "https://github.com/Nyx12012/tavern-client/issues" },
+  "homepage": "https://github.com/Nyx12012/tavern-client#readme",
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.0",
+    "typescript": "^5.4.0"
+  }
+}
