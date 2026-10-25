@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 (2026-10-25)
+
+- Works from CommonJS: `require("tavern-client")` loads a CommonJS build instead of failing
+  with `ERR_PACKAGE_PATH_NOT_EXPORTED`. `import` is unchanged.
+
 ## 1.0.0 (2026-10-13)
 
 First release, tested live against a stock TavernLib 1.5.2 server.

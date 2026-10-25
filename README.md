@@ -8,7 +8,7 @@ event subscriptions, keepalive and reconnects, so a bot is `connect`, `command`,
 npm install tavern-client
 ```
 
-Node 18 or later.
+Node 18 or later. Works with `import` and `require`.
 
 ## Quick start
 

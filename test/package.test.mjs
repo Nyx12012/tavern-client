@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -23,7 +24,18 @@ test("the package is ready for npm", () => {
 test("npm pack ships the build, the readme, the changelog and the licence only", () => {
   const [packed] = JSON.parse(execSync("npm pack --dry-run --json", { cwd: ROOT, stdio: ["ignore", "pipe", "ignore"] }).toString());
   const names = packed.files.map((f) => f.path).sort();
-  assert.ok(names.includes("dist/index.js"));
-  assert.ok(names.includes("dist/index.d.ts"));
-  for (const name of names) assert.match(name, /^(dist\/[\w.]+\.(js|d\.ts)|README\.md|CHANGELOG\.md|LICENSE|package\.json)$/);
+  for (const name of ["dist/index.js", "dist/index.d.ts", "dist/cjs/index.js", "dist/cjs/index.d.ts", "dist/cjs/package.json"]) {
+    assert.ok(names.includes(name), name);
+  }
+  for (const name of names) assert.match(name, /^(dist\/(cjs\/)?[\w.]+\.(js|d\.ts)|dist\/cjs\/package\.json|README\.md|CHANGELOG\.md|LICENSE|package\.json)$/);
+});
+
+test("require loads the CommonJS build with the same exports as import", async () => {
+  const require = createRequire(import.meta.url);
+  assert.match(require.resolve("tavern-client"), /[\\/]dist[\\/]cjs[\\/]index\.js$/);
+  const required = require("tavern-client");
+  const imported = await import("tavern-client");
+  assert.deepEqual(Object.keys(required).sort(), Object.keys(imported).sort());
+  assert.equal(typeof required.TavernClient, "function");
+  assert.notEqual(required.TavernClient, imported.TavernClient);
 });
